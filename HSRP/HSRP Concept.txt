@@ -1,0 +1,15 @@
+What is HSRP?
+    *HSRP is a Cisco proprietary redundancy protocol that ensures network availability by providing automatic failover of the default gateway in a network.
+
+Why we use HSRP?
+    * In a network, hosts (like PCs, printers, etc.) are typically configured with one default gateway. If that gateway fails, those devices can’t reach outside networks (like the internet). HSRP solves this by providing a virtual IP that is always available, even if one router goes down.
+
+How HSRP Works?
+    * Multiple routers are grouped into an HSRP group.
+    * One router is Active (handling traffic).
+    * Another is Standby (ready to take over if active fails).
+    * The rest (if any) are in a Listen state.
+    * They all share a virtual IP address and virtual MAC address.
+When the active router goes down, the standby router becomes active immediately, and hosts continue to send traffic without disruption.
+
+

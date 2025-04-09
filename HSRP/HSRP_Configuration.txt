@@ -1,0 +1,78 @@
+The configuration fo the design as shown in the image are: 
+
+
+Router 1:
+interface GigabitEthernet0/0/0
+ ip address 10.1.12.2 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0/1
+ ip address 10.0.0.10 255.255.255.0
+ duplex auto
+ speed auto
+ standby 1 ip 10.0.0.150
+ standby 1 priority 101
+ standby 1 preempt
+ standby 1 track GigabitEthernet0/0/0
+!
+router rip
+ version 2
+ network 10.0.0.0
+ no auto-summary
+!
+
+
+Router 2:
+interface GigabitEthernet0/0/0
+ ip address 10.1.13.2 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0/1
+ ip address 10.0.0.20 255.255.255.0
+ duplex auto
+ speed auto
+ standby 1 ip 10.0.0.150
+ standby 1 priority 99
+ standby 1 preempt
+!
+router rip
+ version 2
+ network 10.0.0.0
+ no auto-summary
+!
+
+
+Switch 1:
+ip routing
+interface Loopback1
+ ip address 200.200.200.1 255.255.255.0
+!
+interface FastEthernet0/1
+ no switchport
+ ip address 10.1.12.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/2
+ no switchport
+ ip address 10.1.13.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/3
+ no switchport
+ ip address 192.168.1.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+router rip
+ version 2
+ network 10.0.0.0
+ network 192.168.1.0
+ no auto-summary
+!
+
+
+//Assign PC address manually and trace by enabling and disabling router interfaces to check how the router redundancy works.
