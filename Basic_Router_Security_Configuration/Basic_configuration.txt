@@ -1,0 +1,85 @@
+A secure router is your first line of defense in a network. Without proper configuration, it’s vulnerable to attacks like unauthorized remote access, brute-force password guessing, spoofing, or even being used as a launchpad for internal threats.
+
+Basic router security configuration includes: 
+    * Set Hostname
+    * Set Enable Password/Secret
+    * Enable password encryption
+    * Secure Console Access
+    * Configure Banner Messages (Legal Warning)
+    * Create Local User Account for SSH Login
+    * Enable and Configure SSH
+    * Use Access Control Lists (ACLs) to Restrict Remote Access
+    * Enable Logging
+
+
+1. Set hostname 
+    enable
+    configure terminal
+    hostname Router_1
+
+
+
+2. Set enable password
+    enable
+    configure terminal
+    enable secret Router_1_pwd
+
+3. Enable password encryption
+    //if we use enable password instead of enable secret we have to use
+    configure terminal
+    service password-encryption
+
+4. Set console password
+    configure terminal
+    line console 0
+    password Router_1_console
+    login
+
+5. Configure Banner Messages
+    R1(config)# banner motd # 
+    **********************************************
+    *  WARNING! Unauthorized access prohibited!  *
+    *  Violators will be prosecuted.            *
+    **********************************************
+    #
+
+6. Create Local User Account for SSH Login
+    Router_1(config)#username admin privilege 15 secret Router_1_pwd
+
+7. Enable and Configure SSH
+    Router_1(config)#ip domain-name cbo.com
+    Router_1(config)#crypto key gene
+    Router_1(config)#crypto key generate rs
+    Router_1(config)#crypto key generate rsa 
+    The name for the keys will be: Router_1.cbo.com
+    Choose the size of the key modulus in the range of 360 to 4096 for your
+    General Purpose Keys. Choosing a key modulus greater than 512 may take
+    a few minutes.
+
+    How many bits in the modulus [512]: 1024
+    % Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+
+    Router_1(config)#ip ss 
+    *Mar 1 0:51:15.97: %SSH-5-ENABLED: SSH 1.99 has been enabled
+    Router_1(config)#ip ss
+    Router_1(config)#ip ssh vers
+    Router_1(config)#ip ssh version 2
+    Router_1(config)#line vty 0 4
+    Router_1(config-line)#login local
+    Router_1(config-line)#transport input ssh
+    Router_1(config-line)#
+
+8. Use Access Control Lists (ACLs) to Restrict Remote Access
+    Router_1(config)#access-list 10 permit 10.0.0.10
+    Router_1(config)#line vty 0 4
+    Router_1(config-line)#access-class 10 in
+    Router_1(config-line)#
+
+
+9. Enable Logging
+    Router_1(config)#service timestamps log datetime msec 
+    Router_1(config)#logging buffered 4096
+    Router_1(config)#
+
+
+//Additionally we can configure AAA TACACS or Radius server, SNMPV3 for monitoring.
