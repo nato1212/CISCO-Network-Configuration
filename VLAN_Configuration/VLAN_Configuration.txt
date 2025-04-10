@@ -1,0 +1,48 @@
+A VLAN (Virtual LAN) is a logical grouping of devices within a broadcast domain, regardless of their physical location. It improves network performance, security, and manageability.
+
+The configuration step includes:
+    Create VLAN 
+    Assign ports to those VLAN
+    Configure trunk between switches
+
+For the image VLAN shown in this folder the configuration is as follows:
+
+Create VLAN on each switches:
+Switch 1:
+    Switch_1(config)#
+    Switch_1(config)#vlan 20
+    Switch_1(config-vlan)#name HR
+    Switch_1(config-vlan)#exit
+    Switch_1(config)#vlan 40
+    Switch_1(config-vlan)#name IT
+    Switch_1(config-vlan)#exit
+    Switch_1(config)#
+Switch 2:
+    Switch_2>enable
+    Switch_2#configure terminal
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    Switch_2(config)#vlan 20
+    Switch_2(config-vlan)#name HR
+    Switch_2(config-vlan)#exit
+    Switch_2(config)#vlan 40
+    Switch_2(config-vlan)#name IT
+    Switch_2(config-vlan)#exit
+    Switch_2(config)#
+
+Now configure switches port that connect to end devices to access vlan and port that connect other switches to trunk:
+    Switch_1(config)#
+    Switch_1(config)#interface fa0/2
+    Switch_1(config-if)#switchport mode access
+    Switch_1(config-if)#switchport access vlan 20
+    Switch_1(config-if)#exit
+    Switch_1(config)#interface fa0/3
+    Switch_1(config-if)#switchport mode access
+    Switch_1(config-if)#switchport access vlan 40
+    Switch_1(config-if)#exit
+    Switch_1(config)#interface fa0/1
+    Switch_1(config-if)#switchport mode trunk
+    Switch_1(config-if)#exit
+    Switch_1(config)#
+
+
+
