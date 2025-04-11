@@ -45,4 +45,17 @@ Now configure switches port that connect to end devices to access vlan and port 
     Switch_1(config)#
 
 
+Note:
+    If you get error when configuring "switchport mode trunk" write this ->
+            Switch_1(config)#interface fa0/1
+            Switch_1(config-if)#switchport trunk encapsulation dot1q
+            Switch_1(config-if)#switchport mode trunk
+            Switch_1(config-if)#exit
 
+Check the configuration with :
+    Switch_2# show running-config
+    Switch_2# show vlan
+    Switch_2# show interfaces trunk
+
+
+        

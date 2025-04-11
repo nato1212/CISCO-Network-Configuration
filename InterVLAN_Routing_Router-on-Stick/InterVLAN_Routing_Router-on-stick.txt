@@ -1,0 +1,72 @@
+What is Inter-VLAN Routing?
+By default, devices in different VLANs cannot communicate with each other because VLANs are separate broadcast domains. Inter-VLAN routing allows communication between VLANs, using either:
+    * Router-on-a-Stick (most common in smaller setups)
+    * Layer 3 Switch (for larger networks, enterprise setups)
+
+1. Router-on-a-Stick (Using a Router)
+Allow the two VLAN 20 and 40 to communicate each other.
+For image InterVLAN-Router-on-stick configuration is:
+Router:
+    Router>
+    Router>enable
+    Router#configure terminal
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    Router(config)#interface gig0/0/0.20
+    Router(config-subif)#encapsulation dot1Q 20
+    Router(config-subif)#ip address 192.168.20.1 255.255.255.0
+    Router(config-subif)#exit
+    Router(config)#
+    Router(config)#interface gig0/0/0.40
+    Router(config-subif)#encapsulation dot1Q 40
+    Router(config-subif)#ip address 192.168.40.1 255.255.255.0
+    Router(config-subif)#exit
+    Router(config)#interface gig0/0/0
+    Router(config-if)#no shutdown
+
+Switch_1:
+    Switch_1>enable
+    Switch_1#configure terminal
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    Switch_1(config)#interface fa0/24
+    Switch_1(config-if)#switchport mode trunk
+    Switch_1(config-if)#
+
+    interface FastEthernet0/1
+    switchport mode trunk
+    !
+    interface FastEthernet0/2
+    switchport access vlan 20
+    switchport mode access
+    !
+    interface FastEthernet0/3
+    switchport access vlan 40
+    switchport mode access
+    !
+    interface FastEthernet0/24
+    switchport mode trunk
+    !
+
+Switch_2:
+    interface FastEthernet0/1
+    switchport mode trunk
+    !
+    interface FastEthernet0/2
+    switchport access vlan 20
+    switchport mode access
+    !
+    interface FastEthernet0/3
+    switchport access vlan 40
+    switchport mode access
+    !
+
+
+
+General Troubleshooting Steps for Inter-VLAN Routing:
+    1. Verify all cables are securely connected.
+    2. Ensure VLANs are created on all devices.
+    3. Verify that each switch has the correct VLAN configuration using show vlan (on switches) and show running-config.
+    4. On Router-on-a-Stick, verify the subinterfaces are configured correctly and the correct encapsulation (dot1Q) is used.
+    5. Verify Trunk Ports: Switch# show interfaces trunk
+    6. Ensure that each device in the VLAN has the correct IP address, subnet mask, and default gateway.
+    7. Verify Access Control Lists (ACLs):
+

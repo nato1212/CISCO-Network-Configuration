@@ -1,0 +1,50 @@
+By default, devices in different VLANs cannot communicate with each other because VLANs are separate broadcast domains. Inter-VLAN routing allows communication between VLANs, using either:
+    Router-on-a-Stick (most common in smaller setups)
+    Layer 3 Switch (for larger networks, enterprise setups)
+
+Now we will see Layer 3 Switch.
+
+Switch configuration:
+    Switch>
+    Switch>enable
+    Switch#configure terminal
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    Switch(config)#ip routing
+    Switch(config)#vlan 20
+    Switch(config-vlan)#name HR
+    Switch(config-vlan)#exit
+    Switch(config)#vlan 40
+    Switch(config-vlan)#name IT
+    Switch(config-vlan)#exit
+    Switch(config)#interface vlan 20
+    Switch(config-if)#
+    %LINK-5-CHANGED: Interface Vlan20, changed state to up
+
+    Switch(config-if)#ip addres 192.168.20.1 255.255.255.0
+    Switch(config-if)#no shutdown
+    Switch(config-if)#exit
+    Switch(config)#interface vlan 40
+    Switch(config-if)#
+    %LINK-5-CHANGED: Interface Vlan40, changed state to up
+
+    Switch(config-if)#ip address 192.168.40.1 255.255.255.0
+    Switch(config-if)#no shutdown
+    Switch(config-if)#exit
+    Switch(config)#interface fa0/2
+    Switch(config-if)#switchport access vlan 20
+    Switch(config)#interface fa0/3
+    Switch(config-if)#switchport access vlan 40
+    Switch(config-if)#exit
+    Switch(config)#interface fa0/1
+    Switch(config-if)#switchport trunk encapsulation dot1q
+    Switch(config-if)#switchport mode trunk
+
+
+General Troubleshooting Steps for Inter-VLAN Routing:
+    1. Verify all cables are securely connected.
+    2. Ensure VLANs are created on all devices
+    3. Verify that each switch has the correct VLAN configuration using show vlan (on switches) and show running-config.
+    4. Verify Trunk Ports: Switch# show interfaces trunk.
+    5. Ensure that each device in the VLAN has the correct IP address, subnet mask, and default gateway.
+    6. Ensure that there is routing enabled between the VLANs. Router# show ip route
+    7. Verify Access Control Lists (ACLs):
