@@ -1,0 +1,59 @@
+Static routing is a method of routing where routes are manually configured and maintained by a network administrator.
+
+For the image in diagram the configuration is as follows:
+
+Router0:
+    Directly Connected:
+        192.168.1.0/24
+        10.0.1.0/24
+        10.0.2.0/24
+    The configuration:
+        Router(config)#ip route 192.168.2.0 255.255.255.0 10.0.1.2
+        Router(config)#ip route 192.168.4.0 255.255.255.0 10.0.2.2
+        Router(config)#ip route 192.168.3.0 255.255.255.0 10.0.2.2
+        Router(config)#ip route 10.0.3.0 255.255.255.0 10.0.2.2
+        Router(config)#ip route 10.0.4.0 255.255.255.0 10.0.1.2
+        Router(config)#
+
+Router1:
+    Directly Connected:
+        192.168.2.0/24
+        10.0.1.0/24
+        10.0.4.0/24
+    The configuration:
+        Router(config)#ip route 192.168.1.0 255.255.255.0 10.0.1.1
+        Router(config)#ip route 192.168.4.0 255.255.255.0 10.0.4.2
+        Router(config)#ip route 192.168.3.0 255.255.255.0 10.0.4.2
+        Router(config)#ip route 10.0.2.0 255.255.255.0 10.0.1.1
+        Router(config)#ip route 10.0.3.0 255.255.255.0 10.0.4.2
+        Router(config)#
+
+Router2:
+    Directly Connected:
+        192.168.3.0/24
+        10.0.2.0/24
+        10.0.3.0/24
+    The configuration:
+        Router(config)#ip route 192.168.1.0 255.255.255.0 10.0.2.1
+        Router(config)#ip route 192.168.2.0 255.255.255.0 10.0.3.2
+        Router(config)#ip route 192.168.4.0 255.255.255.0 10.0.3.2
+        Router(config)#ip route 10.0.1.0 255.255.255.0 10.0.2.1
+        Router(config)#ip route 10.0.4.0 255.255.255.0 10.0.3.2
+        Router(config)#
+
+
+Router3:
+    Directly Connected:
+        192.168.4.0/24
+        10.0.3.0/24
+        10.0.4.0/24
+    The configuration:
+        Router(config)#ip route 192.168.1.0 255.255.255.0 10.0.4.1
+        Router(config)#ip route 192.168.2.0 255.255.255.0 10.0.4.1
+        Router(config)#ip route 192.168.3.0 255.255.255.0 10.0.3.1
+        Router(config)#ip route 10.0.1.0 255.255.255.0 10.0.4.1
+        Router(config)#ip route 10.0.2.0 255.255.255.0 10.0.3.1
+        Router(config)#
+
+Use show ip route on each router to verify routes.
+Test connectivity using ping from one PC to another on a different LAN.
