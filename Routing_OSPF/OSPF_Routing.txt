@@ -1,0 +1,79 @@
+OSPF (Open Shortest Path First) is a Link-State dynamic routing protocol used to exchange routing information within an Autonomous System (AS).
+
+How OSPF Works:
+    1. Neighbor Discovery: Routers exchange Hello packets to establish adjacency.
+    2. LSA Exchange (Link-State Advertisements): Routers share network topology (LSAs) instead of full routing tables.
+    3. SPF Calculation: Each router builds a Link-State Database (LSDB) and runs the SPF algorithm to calculate the best paths.
+    4. Routing Table Creation: The shortest paths are installed into the routing table.
+
+For the diagram shown the configuration is as follows:
+Router0 (Connecting OSPF 1 and OSPF 2):
+    ! OSPF 1 (Router0 ↔ Router1)
+    router ospf 1
+    router-id 1.1.1.1
+    network 192.168.1.0 0.0.0.255 area 0
+    network 10.0.1.0 0.0.0.255 area 0
+    ! OSPF 2 (Router0 ↔ Router2)
+    router ospf 2
+    router-id 1.1.1.2
+    network 10.0.2.0 0.0.0.255 area 10
+    ! Redistribute OSPF 1 into OSPF 2 and vice versa
+    router ospf 1
+    redistribute ospf 2 subnets
+    router ospf 2
+    redistribute ospf 1 subnets
+
+ Router1 (Connecting OSPF 1 and OSPF 3):
+    ! OSPF 1
+    router ospf 1
+    router-id 2.2.2.1
+    network 192.168.2.0 0.0.0.255 area 0
+    network 10.0.1.0 0.0.0.255 area 0
+    ! OSPF 3
+    router ospf 3
+    router-id 2.2.2.3
+    network 10.0.4.0 0.0.0.255 area 20
+    ! Redistribute
+    router ospf 1
+    redistribute ospf 3 subnets
+    router ospf 3
+    redistribute ospf 1 subnets
+
+Router2 (Connecting OSPF 2 and OSPF 4):
+    ! OSPF 2
+    router ospf 2
+    router-id 3.3.3.2
+    network 192.168.3.0 0.0.0.255 area 10
+    network 10.0.2.0 0.0.0.255 area 10
+    ! OSPF 4
+    router ospf 4
+    router-id 3.3.3.4
+    network 10.0.3.0 0.0.0.255 area 30
+    ! Redistribute
+    router ospf 2
+    redistribute ospf 4 subnets
+    router ospf 4
+    redistribute ospf 2 subnets
+
+Router3 (Connecting OSPF 3 and OSPF 4):
+    ! OSPF 3
+    router ospf 3
+    router-id 4.4.4.3
+    network 192.168.4.0 0.0.0.255 area 20
+    network 10.0.4.0 0.0.0.255 area 20
+    ! OSPF 4
+    router ospf 4
+    router-id 4.4.4.4
+    network 10.0.3.0 0.0.0.255 area 30
+    ! Redistribute
+    router ospf 3
+    redistribute ospf 4 subnets
+    router ospf 4
+    redistribute ospf 3 subnets
+
+Verification:
+    show ip route ospf
+    show ip protocols
+    show ip ospf database
+    show ip ospf interface brief
+
