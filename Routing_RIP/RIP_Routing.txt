@@ -1,0 +1,60 @@
+RIP is a distance-vector routing protocol that uses hop count as its routing metric. It's one of the simplest dynamic routing protocols, making it ideal for small to medium-sized networks.
+It has Scalability Issues Max 15 hops makes it unsuitable for large networks. Uses UDP port 520. Default routing updates Sent every 30 seconds.
+
+RIP v1 is classful — it doesn’t send subnet mask info, so it can't handle VLSM (Variable Length Subnet Masking) or discontiguous networks.
+RIP v2 is classless — it includes subnet masks in updates, supports CIDR, and uses multicast instead of broadcast.
+
+By default, RIP summarizes routes at classful boundaries (e.g., assumes 192.168.1.0 and 192.168.2.0 are part of 192.168.0.0/16).
+No auto-summary prevents RIP from summarizing and ensures routes are advertised with their actual subnet masks.
+
+
+
+
+
+
+For the diagram shown in the image the configuration is:
+
+Router0: 
+    conf t
+    router rip
+    version 2
+    no auto-summary
+    network 192.168.1.0
+    network 10.0.1.0
+    network 10.0.2.0
+    exit
+
+Router1:
+    conf t
+    router rip
+    version 2
+    no auto-summary
+    network 192.168.2.0
+    network 10.0.1.0
+    network 10.0.4.0
+    exit
+
+Router2:
+    conf t
+    router rip
+    version 2
+    no auto-summary
+    network 192.168.3.0
+    network 10.0.2.0
+    network 10.0.3.0
+    exit
+
+Router3:
+    conf t
+    router rip
+    version 2
+    no auto-summary
+    network 192.168.4.0
+    network 10.0.3.0
+    network 10.0.4.0
+    exit
+
+
+Check the configuration with:
+    show ip route rip
+    show ip protocols
