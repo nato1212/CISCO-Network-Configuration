@@ -1,0 +1,76 @@
+EIGRP is an advanced distance vector routing protocol developed by Cisco. It combines the advantages of distance vector and link-state protocols, using the DUAL algorithm to ensure fast convergence and loop-free routing.
+
+
+The configuration for the diagram image shown is:
+Router R0:
+    hostname R0
+    interface G0/0
+    ip address 192.168.1.1 255.255.255.0
+    interface Se0/1/0
+    ip address 10.0.1.1 255.255.255.0
+    interface Se0/1/1
+    ip address 10.0.2.1 255.255.255.0
+    router eigrp 100
+    no auto-summary
+    network 192.168.1.0 0.0.0.255
+    network 10.0.1.0 0.0.0.255
+    network 10.0.2.0 0.0.0.255
+
+Router R1:
+    hostname R1
+    interface G0/0
+    ip address 192.168.2.1 255.255.255.0
+    interface Se0/1/0
+    ip address 10.0.1.2 255.255.255.0
+    interface Se0/1/1
+    ip address 10.0.4.1 255.255.255.0
+    router eigrp 100
+    no auto-summary
+    network 192.168.2.0 0.0.0.255
+    network 10.0.1.0 0.0.0.255
+    network 10.0.4.0 0.0.0.255
+
+Router R2:
+    hostname R2
+    interface G0/0
+    ip address 192.168.3.1 255.255.255.0
+    interface Se0/1/0
+    ip address 10.0.2.2 255.255.255.0
+    interface Se0/1/1
+    ip address 10.0.3.1 255.255.255.0
+    router eigrp 100
+    no auto-summary
+    network 192.168.3.0 0.0.0.255
+    network 10.0.2.0 0.0.0.255
+    network 10.0.3.0 0.0.0.255
+
+Router R3:
+    hostname R3
+    interface G0/0
+    ip address 192.168.4.1 255.255.255.0
+    interface Se0/1/0
+    ip address 10.0.4.2 255.255.255.0
+    interface Se0/1/1
+    ip address 10.0.3.2 255.255.255.0
+    router eigrp 100
+    no auto-summary
+    network 192.168.4.0 0.0.0.255
+    network 10.0.4.0 0.0.0.255
+    network 10.0.3.0 0.0.0.255
+
+
+Verify Configuration:
+    show ip route
+    show ip eigrp neighbors
+    show ip protocols
+
+
+
+
+
+Best Practices:
+    -Disable auto-summary in most modern networks
+    -Use passive-interface to prevent unnecessary hellos on end-user LANs
+    -Use router-id for easier troubleshooting
+    -Summarize routes at distribution points if needed
+    -Watch for unequal-cost load balancing using variance
